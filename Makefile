@@ -18,4 +18,9 @@ pull-autodl-trackers:
 	fi
 	cd config/arrnounced/autodl-trackers && git pull;
 
+build-base-image: export DOCKER_COMMON_ENV_PATH_FROM_PYTHON_DOCKER=../../config/docker/env/common.env
+build-base-image: export DOCKER_SPECIFIC_ENV_PATH_FROM_PYTHON_DOCKER=../../config/docker/env/python.env
+build-base-image:
+	make -C git_projects/python-docker build-base-image
+
 	
