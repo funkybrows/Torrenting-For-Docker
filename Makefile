@@ -12,4 +12,10 @@ pull-arrnounced:
 	fi
 	cd git_projects/arrnounced && git pull;
 
+pull-autodl-trackers:
+	if ! [ -r config/arrnounced/autodl-trackers ]; then\
+		git clone https://github.com/autodl-community/autodl-trackers.git config/arrnounced/autodl-trackers;\
+	fi
+	cd config/arrnounced/autodl-trackers && git pull;
+
 	
