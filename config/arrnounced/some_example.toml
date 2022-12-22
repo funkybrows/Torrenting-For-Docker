@@ -1,0 +1,42 @@
+# Logging configuration
+[log]
+to_file = true
+to_console = true
+
+[backends.MySonarr]
+url = "https://some.url.tosonarr:123456"
+# Mandatory
+type = "sonarr"
+apikey = "some-api-key"
+
+[trackers.tl]
+# Mandatory
+irc_nickname = "someusername"
+irc_server = "some-irc-address"
+irc_port = 1234
+
+# IRC channels to join. If irc_invite_cmd is set the channels will not be
+# joined until an invite to a channel is received.
+# Mandatory
+irc_channels = "#torrentleech"
+
+# Password for registration with IRC NICKSERV.
+# Default empty
+irc_ident_password = "somepasswordtoirc"
+
+# Connect to IRC using TLS (Transport Layer Security)
+irc_tls = true
+# Verify TLS certificate. False means connect even if not valid.
+irc_tls_verify = false
+
+# Whether to use HTTPS when downloading torrent file
+torrent_https = true
+
+notify_backends = "MySonarr"
+
+
+[trackers.tl.settings]
+textbox = ""
+rsskey = "somersskey"
+
+
