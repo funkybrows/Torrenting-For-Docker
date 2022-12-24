@@ -42,4 +42,9 @@ deploy-project:
 		-f config/docker/compose/docker-compose.arrnounced.yaml \
 		up
 
+teardown-project:
+	docker compose \
+		-f config/docker/compose/docker-compose.arrnounced.yaml \
+		down
+
 	
