@@ -29,4 +29,17 @@ build-arrnounced:
 	make -C git_projects/arrnounced build-project
 
 
+include config/docker/env/common.env
+include config/docker/env/launch.env
+export
+
+deploy-project:
+
+	DOCKER_APP_DEST=$(DOCKER_APP_DEST) \
+	DOCKER_TAG_VERSION=$(DOCKER_TAG_VERSION) \
+	NAMESPACE=$(NAMESPACE) \
+	docker compose \
+		-f config/docker/compose/docker-compose.arrnounced.yaml \
+		up
+
 	
