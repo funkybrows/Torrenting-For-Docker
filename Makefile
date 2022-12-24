@@ -23,4 +23,10 @@ build-base-image: export DOCKER_SPECIFIC_ENV_PATH_FROM_PYTHON_DOCKER=../../confi
 build-base-image:
 	make -C git_projects/python-docker build-base-image
 
+build-arrnounced: export DOCKER_COMMON_ENV_PATH=../../config/docker/env/common.env
+build-arrnounced: export DOCKER_SPECIFIC_ENV_PATH=../../config/docker/env/arrnounced_build.env
+build-arrnounced:
+	make -C git_projects/arrnounced build-project
+
+
 	
