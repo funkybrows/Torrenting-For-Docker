@@ -1,3 +1,10 @@
+# See sample env for variables passed to deploy-project
+
+DOCKER_TAG_VERSION ?= latest
+DOCKER_APP_DEST ?= /app
+NAMESPACE ?= production
+PROJECT_NAME ?= torrenting
+
 pull-python-docker:
 	if ! [ -d git_projects/python-docker ]; then\
 		mkdir -p git_projects;\
