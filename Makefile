@@ -25,6 +25,13 @@ pull-autodl-trackers:
 	fi
 	cd config/arrnounced/autodl-trackers && git pull;
 
+pull-deluge-control:
+	if ! [ -r git_projects/deluge_control ]; then\
+		mkdir -p git_projects;\
+		git clone https://github.com/funkybrows/Deluge-Control.git git_projects/deluge_control;\
+	fi
+	cd git_projects/deluge_control && git pull;
+
 build-base-image: export DOCKER_COMMON_ENV_PATH_FROM_PYTHON_DOCKER=../../config/docker/env/common.env
 build-base-image: export DOCKER_SPECIFIC_ENV_PATH_FROM_PYTHON_DOCKER=../../config/docker/env/python.env
 build-base-image:
