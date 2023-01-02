@@ -43,6 +43,11 @@ build-arrnounced:
 	make -C git_projects/arrnounced build-project
 
 
+build-deluge-control: export DOCKER_COMMON_ENV_PATH_FROM_PYTHON_DOCKER=../../config/docker/env/common.env
+build-deluge-control: export DOCKER_SPECIFIC_ENV_PATH_FROM_PYTHON_DOCKER=../../config/docker/env/deluge_control_build.env
+build-deluge-control:
+	make -C git_projects/deluge_control build-project
+
 include config/docker/env/common.env
 include config/docker/env/launch.env
 export
