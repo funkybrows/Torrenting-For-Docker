@@ -63,7 +63,7 @@ deploy-project:
 
 teardown-project:
 	docker compose \
-		-f config/docker/compose/docker-compose.arrnounced.yaml \
+		-f config/docker/compose/docker-compose.yaml \
 		down
 
 	
