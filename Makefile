@@ -6,6 +6,10 @@ NAMESPACE ?= production
 PROJECT_NAME ?= torrenting
 PYTHON_VERSION ?= 3.9
 
+ifndef DOCKER_WATCH
+DOCKER_NO_WATCH = -d
+endif
+
 pull-python-docker:
 	if ! [ -d git_projects/python-docker ]; then\
 		mkdir -p git_projects;\
@@ -60,7 +64,7 @@ deploy-project:
 	NAMESPACE=$(NAMESPACE) \
 	docker compose \
 		-f config/docker/compose/docker-compose.yaml \
-		up
+		up $(DOCKER_NO_WATCH)
 
 teardown-project:
 	docker compose \
