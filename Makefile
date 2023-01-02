@@ -69,7 +69,7 @@ deploy-project:
 teardown-project:
 	docker compose \
 		-f config/docker/compose/docker-compose.yaml \
-		down
+		down --remove-orphans
 
 DOCKER_LOCAL_CMD ?= /bin/bash
 
