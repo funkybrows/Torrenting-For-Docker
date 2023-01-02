@@ -58,7 +58,7 @@ deploy-project:
 	DOCKER_TAG_VERSION=$(DOCKER_TAG_VERSION) \
 	NAMESPACE=$(NAMESPACE) \
 	docker compose \
-		-f config/docker/compose/docker-compose.arrnounced.yaml \
+		-f config/docker/compose/docker-compose.yaml \
 		up
 
 teardown-project:

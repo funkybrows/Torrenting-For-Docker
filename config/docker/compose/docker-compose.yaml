@@ -1,0 +1,95 @@
+version: "3"
+services:
+  arrnounced:
+    image: ${DOCKER_REGISTRY}/arrnounced/${NAMESPACE}:${DOCKER_TAG_VERSION}
+    container_name: "${PROJECT_NAME}-arrnounced"
+    environment:
+      CONFIG_FOLDER_PATH: /root/.arrnounced/config
+      RABBIT_EXCHANGE: ${RABBIT_EXCHANGE}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+
+    volumes:
+      - "${DOCKER_ARRNOUNCED_USER_CONFIG_PATH_FROM_COMPOSE}/autodl-trackers/trackers:/root/.arrnounced/autodl-trackers/trackers"
+      - "${DOCKER_ARRNOUNCED_USER_CONFIG_PATH_FROM_COMPOSE}/config.toml:/root/.arrnounced/config/config.toml"
+      - "${DOCKER_ARRNOUNCED_USER_CONFIG_PATH_FROM_COMPOSE}/logging.conf:/root/.arrnounced/config/logging.conf"
+      - "torrenting-logs:/root/.arrnounced/logs"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  deluge-control:
+    image: ${DOCKER_REGISTRY}/deluge_control/${NAMESPACE}:${DOCKER_TAG_VERSION}
+    container_name: "${PROJECT_NAME}-deluge_control"
+    environment:
+      - CONFIG_FOLDER_PATH=/root/.deluge_control/config
+      - DEFAULT_DELUGE_HOST=${DEFAULT_DELUGE_HOST}
+      - DEFAULT_DELUGE_PORT=${DEFAULT_DELUGE_PORT}
+      - DEFAULT_DELUGE_USERNAME=${DEFAULT_DELUGE_USERNAME}
+      - DEFAULT_DELUGE_PASSWORD=${DEFAULT_DELUGE_PASSWORD}
+      - PG_DRIVER=psycopg2
+      - PG_PASSWORD=${PG_PASSWORD}
+      - PG_HOST=${PROJECT_NAME}-postgres
+      - PG_NAME=${PG_NAME}
+      - PG_USER=${PG_USER}
+      - RABBIT_EXCHANGE=${RABBIT_EXCHANGE}
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PASS=${RABBITMQ_PASS}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+
+    volumes:
+      - "${DOCKER_DELUGE_CONTROL_USER_CONFIG_PATH_FROM_COMPOSE}/:/root/.deluge_control/config/"
+      - "torrenting-logs:/root/.deluge_control/logs"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: "${PROJECT_NAME}-postgres"
+    environment:
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_USER=${PG_USER}
+      - PG_NAME=${PG_NAME}
+    volumes:
+      - torrenting-postgres-data:/var/lib/postgresql/data
+      - ${DOCKER_POSTGRES_SCRIPTS_PATH_FROM_COMPOSE}:/docker-entrypoint-initdb.d
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${PG_USER} -d ${PG_NAME}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - ${PG_PORT}:5432
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3.11
+    hostname: ${PROJECT_NAME}-rabbitmq
+    container_name: ${PROJECT_NAME}-rabbitmq
+    command: rabbitmq-server
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    ports:
+      - ${AMQP_PORT}:5672
+      - "${PROMETHEUS_PORT}:15672"
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  torrenting-logs:
+    driver: local
+  torrenting-postgres-data:
+    driver: local
