@@ -66,4 +66,12 @@ teardown-project:
 		-f config/docker/compose/docker-compose.yaml \
 		down
 
-	
+DOCKER_LOCAL_CMD ?= /bin/bash
+
+launch-local-project:
+	DOCKER_APP_DEST=$(DOCKER_APP_DEST) \
+	DOCKER_TAG_VERSION=$(DOCKER_TAG_VERSION) \
+	NAMESPACE=$(NAMESPACE) \
+	docker compose \
+		-f config/docker/compose/docker-compose.yaml \
+		run -it deluge-control $(DOCKER_LOCAL_CMD)
