@@ -4,6 +4,7 @@ DOCKER_TAG_VERSION ?= latest
 DOCKER_APP_DEST ?= /app
 NAMESPACE ?= production
 PROJECT_NAME ?= torrenting
+PYTHON_VERSION ?= 3.9
 
 pull-python-docker:
 	if ! [ -d git_projects/python-docker ]; then\
@@ -34,6 +35,7 @@ pull-deluge-control:
 
 build-base-image: export DOCKER_COMMON_ENV_PATH_FROM_PYTHON_DOCKER=../../config/docker/env/common.env
 build-base-image: export DOCKER_SPECIFIC_ENV_PATH_FROM_PYTHON_DOCKER=../../config/docker/env/python.env
+build-base-image: export PYTHON_VERSION=$(PYTHON_VERSION)
 build-base-image:
 	make -C git_projects/python-docker build-base-image
 
