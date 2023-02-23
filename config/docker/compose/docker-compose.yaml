@@ -1,25 +1,5 @@
 version: "3"
 services:
-  arrnounced:
-    image: ${DOCKER_REGISTRY}/arrnounced/${NAMESPACE}:${DOCKER_TAG_VERSION}
-    container_name: "${PROJECT_NAME}-arrnounced"
-    environment:
-      CONFIG_FOLDER_PATH: /root/.arrnounced/config
-      RABBIT_EXCHANGE: ${RABBIT_EXCHANGE}
-      RABBITMQ_HOST: ${RABBITMQ_HOST}
-      RABBITMQ_PASS: ${RABBITMQ_PASS}
-      RABBITMQ_USER: ${RABBITMQ_USER}
-
-    volumes:
-      - "${DOCKER_ARRNOUNCED_USER_CONFIG_PATH_FROM_COMPOSE}/autodl-trackers/trackers:/root/.arrnounced/autodl-trackers/trackers"
-      - "${DOCKER_ARRNOUNCED_USER_CONFIG_PATH_FROM_COMPOSE}/config.toml:/root/.arrnounced/config/config.toml"
-      - "${DOCKER_ARRNOUNCED_USER_CONFIG_PATH_FROM_COMPOSE}/logging.conf:/root/.arrnounced/config/logging.conf"
-      - "torrenting-logs:/root/.arrnounced/logs"
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-    restart: unless-stopped
-
   deluge-control:
     image: ${DOCKER_REGISTRY}/deluge_control/${NAMESPACE}:${DOCKER_TAG_VERSION}
     container_name: "${PROJECT_NAME}-deluge_control"
