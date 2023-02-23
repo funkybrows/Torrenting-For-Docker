@@ -44,12 +44,14 @@ build-base-image:
 
 build-arrnounced: export DOCKER_COMMON_ENV_PATH=../../config/docker/env/common.env
 build-arrnounced: export DOCKER_SPECIFIC_ENV_PATH=../../config/docker/env/arrnounced_build.env
+build-arrnounced: export PYTHON_VERSION=3.9
 build-arrnounced:
 	make -C git_projects/arrnounced build-project
 
 
 build-deluge-control: export DOCKER_COMMON_ENV_PATH_FROM_PYTHON_DOCKER=../../config/docker/env/common.env
 build-deluge-control: export DOCKER_SPECIFIC_ENV_PATH_FROM_PYTHON_DOCKER=../../config/docker/env/deluge_control_build.env
+build-deluge-control: export PYTHON_VERSION=3.10
 build-deluge-control:
 	make -C git_projects/deluge_control build-project
 
