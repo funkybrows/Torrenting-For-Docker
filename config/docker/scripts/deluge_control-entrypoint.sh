@@ -1,3 +1,5 @@
 #!/bin/bash
-cd /app/src/deluge_control;
+cd /app/src;
+alembic upgrade head;
+cd deluge_control;
 python3 main.py
